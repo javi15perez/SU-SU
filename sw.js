@@ -1,5 +1,5 @@
-const CACHE='susu-v6-20261002-1';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon.svg'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))))});
+const CACHE='susu-v7-20261002-1';
+const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
+self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);for(const url of ASSETS){try{const req=new Request(url,{cache:'reload'});const res=await fetch(req);if(res.ok)await cache.put(req,res.clone())}catch{}}await self.skipWaiting()})()));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key!==CACHE)await caches.delete(key);await self.clients.claim()})()));
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET'||new URL(req.url).origin!==self.location.origin)return;if(req.mode==='navigate'){event.respondWith((async()=>{try{const res=await fetch(req,{cache:'no-cache'});if(res.ok){const cache=await caches.open(CACHE);cache.put('./index.html',res.clone())}return res}catch{return (await caches.match('./index.html'))||Response.error()}})());return}event.respondWith((async()=>{try{const res=await fetch(req,{cache:'no-cache'});if(res.ok){const cache=await caches.open(CACHE);cache.put(req,res.clone())}return res}catch{return (await caches.match(req))||Response.error()}})())});

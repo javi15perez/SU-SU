@@ -1,8 +1,8 @@
-# SU SU v6
+# SU SU v7
 
 PWA minimalista para nutrición, flexiones/dominadas y progreso corporal.
 
-## v6
+## v7
 - Ledger estricto de flexiones: cada pulsación guarda un evento y el total de HOY es la suma exacta de esos eventos.
 - Últimos registros visibles para comprobar +10/+25 y Deshacer.
 - Cámara trasera y Galería separadas.
