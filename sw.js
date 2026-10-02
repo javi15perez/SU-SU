@@ -1,4 +1,4 @@
-const CACHE='susu-v7-20261002-final';
+const CACHE='susu-v8-20261002-1';
 const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);for(const url of ASSETS){try{const req=new Request(url,{cache:'reload'});const res=await fetch(req);if(res.ok)await cache.put(req,res.clone())}catch{}}await self.skipWaiting()})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key!==CACHE)await caches.delete(key);await self.clients.claim()})()));
