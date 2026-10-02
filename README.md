@@ -1,11 +1,23 @@
-# SU SU v3
-PWA mobile-first personal para nutrición, actividad y progreso. Diseñada para iPhone y GitHub Pages, sin backend ni coste mensual.
+# SU SU — Minimal PWA
 
-## Incluye
-Dashboard diario; kcal/proteína/carbohidratos/grasas; comidas y favoritos; historial; objetivos; flexiones/dominadas; pádel/tenis/calistenia/actividad personalizada; totales semanales y mensuales; récords; retos mensuales; peso/cintura; fotos y comparación; recomendaciones Bangkok; perfil; export/import JSON; PWA offline.
+PWA mobile-first para iPhone. Sin framework ni backend obligatorio: GitHub Pages + almacenamiento local.
 
-## Datos y privacidad
-Los datos se guardan localmente en el navegador del dispositivo. Las fotos se comprimen antes de guardarse; el almacenamiento disponible depende de iOS/Safari. Exporta backups periódicamente desde Ajustes.
+## UX
+- Home: media diaria de flexiones del mes, objetivo, kcal, macros y resumen de flexiones/dominadas.
+- Comida: búsqueda rápida + captura de foto.
+- Progreso: gráfica 7D/30D/3M/1A, récords, check-in semanal, fotos y comparación.
+- Backup JSON export/import.
+- Offline mediante service worker.
 
-## IA, voz y Siri
-La arquitectura expone acciones locales y un parser de texto básico sin fingir IA. El análisis visual real requiere conectar un proveedor/API; no se incluye ninguna clave ni servicio de pago. Siri puede abrir shortcuts de la PWA y puede ampliarse con Atajos de iOS.
+## Gemini (foto de comida)
+Nunca pongas una Gemini API key en `app.js`: el repositorio y GitHub Pages son públicos.
+
+En Ajustes existe `Endpoint privado para Gemini`. Debe aceptar POST JSON:
+`{ image: "data:image/jpeg;base64,...", prompt: "..." }`
+y devolver:
+`{ "name":"...", "kcal":650, "protein_g":40, "carbs_g":70, "fat_g":20 }`
+
+La opción recomendada es un Cloudflare Worker con la API key guardada como Secret. Sin endpoint, la cámara sigue funcionando y abre el registro manual con la foto como referencia.
+
+## Publicación
+Sube el contenido de esta carpeta a la raíz de `javi15perez/SU-SU` y GitHub Pages servirá la app estática.
