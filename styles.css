@@ -2,3 +2,5 @@
 
 .actions{flex-wrap:wrap}.eventlog{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:12px;color:#999}.eventlog b{color:#444;font-weight:650}
 button,.photoPicker{touch-action:manipulation}.todayGoal{margin-top:7px;font-size:12px;color:#999}.undo,.del,.back{min-height:44px;min-width:44px}.stat,.action,.iconbtn,.nav button,.metricTabs button,.tabs button,.searchResults button,.historyItem{min-height:44px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+.macroline{display:flex;justify-content:center;gap:10px 16px;flex-wrap:wrap}.macroline span{white-space:nowrap}
