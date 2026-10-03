@@ -1,0 +1,35 @@
+SU SU v21 - pre-release audit
+
+Automated/static checks passed:
+- app.js syntax: PASS
+- sw.js syntax: PASS
+- ZIP/file integrity: PASS
+- storage key remains 'susu': PASS
+- pre-update local backup for versions <21: PASS
+- service-worker cache bumped to v21: PASS
+- Camera and Gallery are separate inputs/actions: PASS
+- meal Camera -> compression -> context -> Gemini flow references present: PASS
+- meal Gallery -> compression -> context -> Gemini flow references present: PASS
+- robust image decode: createImageBitmap + HTML Image fallback: PASS
+- photo errors handled without crashing flow: PASS
+- check-in Camera and Gallery selectors present: PASS
+- text Interpret flow present: PASS
+- barcode and nutrition-label flows present: PASS
+- all data-act UI actions map to an action handler: PASS
+- day cutoff boundary semantics 01:59/02:00: PASS
+- maintenance formula direction (gain/loss): PASS
+- 103 generic offline foods parsed with sane numeric ranges: PASS
+- accent-insensitive food search: PASS
+- 43 common ES/EN food queries tested: PASS
+- quantity-prefixed search (200 g pollo / 1 plátano / 250 ml leche): PASS
+- unknown food exposes Gemini Interpret fallback: PASS
+
+Device-only checks still required after deploy:
+- iPhone Camera picker opens and returns a real photo
+- iPhone Gallery picker accepts HEIC/JPEG/PNG from Photos
+- Gemini live image request succeeds from deployed GitHub origin
+- barcode camera recognition on a physical package
+- nutrition-label recognition on a physical package
+- update from the user's real local v18/v20 data preserves all records/photos
+
+Worker: keep deployed Worker v17. No Worker update required.
