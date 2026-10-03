@@ -1,0 +1,21 @@
+AUDITORÍA ESTÁTICA v18
+PASS JavaScript syntax: app.js
+PASS JavaScript syntax: sw.js
+PASS storage key remains `susu`
+PASS schema/version = 18
+PASS migration auto-backup threshold = 18
+PASS backupVersion = 18
+PASS day cutoff default remains 02:00
+PASS empty food search renders zero food results
+PASS search caps initial results at 3
+PASS weight required + numeric bounds
+PASS waist required + numeric bounds
+PASS weekly due threshold = 7 days
+PASS body-photo privacy text and IndexedDB path retained
+PASS Worker endpoint retained; no Worker change required
+
+PRUEBAS DE DISPOSITIVO PENDIENTES
+- Teclado/focus real en iPhone/Safari PWA.
+- Cámara/barcode/etiqueta reales.
+- Persistencia con datos reales del navegador del usuario.
+Estas no pueden certificarse desde la auditoría estática.

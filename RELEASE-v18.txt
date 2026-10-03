@@ -1,0 +1,16 @@
+SU SU v18 — Mobile & Weekly Check-in
+
+CAMBIOS
+- Añadir comida rediseñado para móvil: buscador compacto, micrófono + interpretar integrados.
+- No se muestran alimentos hasta escribir.
+- Máximo 3 resultados iniciales.
+- Acciones grandes: Foto, Código, Etiqueta, Favoritos, Mis platos.
+- Habituales y recientes compactos.
+- Check-in semanal persistente cada 7 días desde el último check-in.
+- Aviso rojo en Hoy hasta completar el check-in.
+- Peso y cintura obligatorios; pecho/brazo y fotos opcionales.
+- Fotos corporales permanecen locales y nunca se mandan a Gemini.
+- Mantiene clave localStorage `susu`, corte 02:00, IndexedDB de fotos y Worker v17 actual.
+
+ACTUALIZACIÓN
+Reemplazar los archivos de la app en GitHub Pages. NO hace falta tocar Cloudflare Worker: v18 usa el Worker v17 ya desplegado.
