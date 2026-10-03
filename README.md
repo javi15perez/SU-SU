@@ -1,21 +1,14 @@
-# SU SU v7
+# SU SU v13
 
-PWA minimalista para nutrición, flexiones/dominadas y progreso corporal.
+Versión consolidada de SU SU.
 
-## v7
-- Ledger estricto de flexiones: cada pulsación guarda un evento y el total de HOY es la suma exacta de esos eventos.
-- Últimos registros visibles para comprobar +10/+25 y Deshacer.
-- Cámara trasera y Galería separadas.
-- Flujo preparado para análisis nutricional por imagen mediante un Worker privado.
-- Check-in corporal con medidas + fotos privadas.
-- Offline y backup local.
+Incluye: mensajes motivacionales por progreso, macros visuales, media de flexiones de 7 días, calendario mensual, edición de días anteriores, racha de semanas naturales (5/7), mejor semana y récords, resumen semanal, tendencia de peso, comparador de fotos, botón + global, búsqueda/recientes/favoritos, texto o dictado de comida, foto + contexto, aprendizaje local de comidas, actividad manual con ajuste de kcal y almacenamiento de fotos en IndexedDB.
 
-## IA nutricional
-La app nunca debe incluir claves en el frontend. `profile.geminiEndpoint` apunta a un Worker privado. El Worker previsto:
-1. recibe una imagen JPEG comprimida;
-2. Gemini identifica alimentos y estima porciones en JSON estructurado;
-3. USDA FoodData Central aporta composición nutricional cuando existe correspondencia;
-4. el Worker calcula kcal/proteína/carbohidratos/grasas;
-5. la app obliga a revisar antes de guardar.
+## Actualización
+Mantiene la clave `susu`; los datos existentes se migran. Las fotos antiguas en localStorage se migran a IndexedDB cuando sea posible.
 
-Las estimaciones fotográficas no sustituyen pesar ingredientes: aceite, salsas y componentes ocultos pueden alterar el resultado.
+## Gemini
+Para texto/dictado y foto + contexto, sustituye el código del Worker actual por `cloudflare-worker-v13.js` y despliega. La API key sigue guardada como secret del Worker.
+
+## Backup
+El backup JSON incluye también las fotos, aunque internamente se guarden en IndexedDB.
