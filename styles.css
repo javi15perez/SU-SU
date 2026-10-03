@@ -16,3 +16,9 @@ button,.photoPicker{touch-action:manipulation}.todayGoal{margin-top:7px;font-siz
 
 /* v15 clarity + current SU SU day */
 .calDay.current{position:relative;box-shadow:inset 0 0 0 2px #111}.calDay.current b{font-weight:850}.nutritionEdit{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px}.nutritionEdit label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#666}.nutritionEdit .input{margin-top:6px;margin-bottom:0;font-size:20px;font-weight:750;color:#111}@media(max-width:360px){.nutritionEdit{grid-template-columns:1fr}}
+/* v17 */
+.foodQuickActions{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dailySummaryBtn{width:100%;border:0;background:#f6f6f6;border-radius:14px;padding:13px 14px;text-align:left;font-weight:750;margin:0 0 14px}
+.monthCard,.maintenanceCard{margin:14px 16px;padding:16px;border:1px solid #e9e9e9;border-radius:20px;background:#fff}
+.maintenanceCard{display:flex;flex-direction:column;gap:5px}.maintenanceCard span{font-size:10px;letter-spacing:.12em;font-weight:800;color:#777}.maintenanceCard strong{font-size:23px}.maintenanceCard small{color:#777;line-height:1.35}.maintenanceCard.pending strong{font-size:18px}.monthWeight{font-size:13px;font-weight:700;margin-top:12px}.dailyPhotos{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.dailyPhotos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}.dayVerdict{font-size:22px;line-height:1.05;font-weight:900;letter-spacing:-.03em;margin:22px 0 8px}.labelPer100{display:flex;flex-direction:column;gap:4px;padding:14px;background:#f6f6f6;border-radius:14px;margin:12px 0}.labelPer100 b{font-size:11px;letter-spacing:.1em}.labelPer100 span{font-size:13px}.shortcutConfirm{font-size:20px;margin:18px 0}.foodQuickActions .secondary{margin:0}
+.recoveryNote{margin:18px 0 4px;padding:14px;border-radius:14px;background:#f6f6f6;font-weight:750;line-height:1.3}

@@ -1,14 +1,9 @@
-# SU SU v13
+# SU SU v17 — audited candidate
 
-Versión consolidada de SU SU.
+Base: v16 development branch, corrected and audited before release.
 
-Incluye: mensajes motivacionales por progreso, macros visuales, media de flexiones de 7 días, calendario mensual, edición de días anteriores, racha de semanas naturales (5/7), mejor semana y récords, resumen semanal, tendencia de peso, comparador de fotos, botón + global, búsqueda/recientes/favoritos, texto o dictado de comida, foto + contexto, aprendizaje local de comidas, actividad manual con ajuste de kcal y almacenamiento de fotos en IndexedDB.
+Includes: smart food search + Gemini interpretation, photo/context, favorites/recent habits, barcode lookup via Open Food Facts, nutrition-label scan via Gemini, calendar with 02:00 SU SU day cutoff, weekly/monthly progress, daily summary, deletable meals/exercise with confirmation, body/meal photos in IndexedDB, backups, maintenance estimate, and data model prepared for GTR 4 / Apple Health.
 
-## Actualización
-Mantiene la clave `susu`; los datos existentes se migran. Las fotos antiguas en localStorage se migran a IndexedDB cuando sea posible.
+Important: GTR 4 / HealthKit automatic sync and native Siri are NOT implemented yet. URL actions are only groundwork for future iPhone Shortcuts.
 
-## Gemini
-Para texto/dictado y foto + contexto, sustituye el código del Worker actual por `cloudflare-worker-v13.js` y despliega. La API key sigue guardada como secret del Worker.
-
-## Backup
-El backup JSON incluye también las fotos, aunque internamente se guarden en IndexedDB.
+Before using barcode AI fallback / nutrition-label scan, deploy `cloudflare-worker-v17.js` per `UPDATE-WORKER.txt`.

@@ -1,17 +1,21 @@
-# Smoke test v12
-1. Abrir app y comprobar datos previos.
-2. Añadir flexiones y verificar mensaje/media.
-3. Progreso: calendario, tocar ayer, añadir flexiones/comida a ayer.
-4. Ver racha semanal y mejor semana.
-5. Comida: buscar coco, favorito, reciente, describir y botón Dictar.
-6. Foto de comida + contexto -> revisar -> guardar.
-7. Check-in con foto -> historial -> Antes/Ahora.
-8. Exportar backup y confirmar que descarga JSON.
-9. Actividad manual -> comprobar ajuste de objetivo kcal.
+# Pruebas realizadas / smoke test v17
 
-## v13 · preparación GTR 4
-- Mantiene la clave localStorage `susu` y migra schema a 13.
-- Estructura diaria preparada para pasos, kcal activas, distancia, minutos de ejercicio, sueño, FC reposo, workouts, fuente y hora de actualización.
-- Prioridad kcal: si existen kcal importadas de Salud se usan esas; si no, se usa actividad manual. No se suman ambas.
-- Tarjeta GTR 4/Salud preparada en HOY y pantalla de estado.
-- Sin puente HealthKit todavía: no se afirma sincronización automática hasta instalar el componente iOS.
+Automáticas ejecutadas:
+- Sintaxis app.js, sw.js y Worker.
+- Migración simulada v15 -> v17 preservando comida/flexiones y creando backup previo.
+- Corte 02:00: 01:59 -> día anterior; 02:00 -> día actual.
+- Cambio de mes y semana lunes-domingo.
+- Fórmula de mantenimiento: ganar peso => mantenimiento < ingesta; perder => mantenimiento > ingesta.
+- Contrato Worker simulado: texto, etiqueta nutricional y lectura de barcode.
+- Invariantes: schema/backup/cache v17, sin función antigua streak(), confirmación de borrado.
+
+Pruebas que requieren dispositivo/servicio real antes de considerarla estable:
+1. Actualización real desde la versión instalada conservando datos/fotos.
+2. Interpretar texto contra Worker desplegado.
+3. Foto + contexto contra Worker desplegado.
+4. Código de barras con cámara de iPhone y Open Food Facts.
+5. Etiqueta nutricional con cámara y Worker v17.
+6. Exportar -> importar backup real con fotos.
+7. Cambio real de 01:59 a 02:00 si se quiere validar en vivo.
+
+No se considera implementado: HealthKit/GTR 4 automático ni Siri nativo.

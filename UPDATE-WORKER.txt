@@ -1,9 +1,10 @@
-SU SU v11 — actualización del Worker de comida
+IMPORTANTE — SU SU v17
 
-La app sigue funcionando con el Worker anterior para fotos, pero para activar "Describir / dictar" y "Foto + contexto" hay que sustituir el código del Worker susu-food-ai por cloudflare-worker-v11.js y desplegarlo.
+El Worker publicado actualmente debe actualizarse para activar lectura de etiqueta y fallback de lectura de códigos por imagen.
 
-NO cambies ni borres el secreto GEMINI_API_KEY.
-El endpoint sigue siendo el mismo:
-https://susu-food-ai.javiperezespanol.workers.dev
+1. Cloudflare > Workers & Pages > susu-food-ai > Edit code.
+2. Sustituye el código por `cloudflare-worker-v17.js`.
+3. Deploy.
+4. Abre la URL del Worker y comprueba que devuelve version 17 y features: image, image_context, text, nutrition_label, barcode_read.
 
-Después de desplegar, abrir el endpoint en el navegador debe devolver ok:true y features con image, image_context y text.
+No cambies ni expongas GEMINI_API_KEY.

@@ -1,0 +1,17 @@
+SU SU v17 — audited candidate
+
+Correcciones principales frente a la rama v16:
+- Fórmula de mantenimiento corregida: ganancia de peso reduce el mantenimiento estimado respecto a la ingesta; pérdida lo aumenta.
+- Mantenimiento exige >=3 pesajes, >=14 días y >=80% de días con ingesta útil; usa tendencia lineal de peso y nunca cambia el objetivo automáticamente.
+- Corte SU SU de 02:00 aplicado a media de 7 días, mes y semanas naturales.
+- Racha semanal no se rompe por una semana actual todavía incompleta.
+- Eliminada lógica antigua de racha diaria.
+- Borrado de comidas/entrenamientos pide confirmación y revierte si falla el guardado.
+- Limpieza de foto de comida al eliminar el registro.
+- Importación limpia fotos temporales si el proceso falla.
+- Migración a IndexedDB incluye fotos corporales y fotos antiguas de comidas.
+- Actualización de service worker pendiente se aplica al cerrar un modal, sin quedarse bloqueada.
+- Etiquetas nutricionales y resultados de IA usan nombres explícitos de macros.
+- Backup marcado como v17.
+
+Pendiente deliberadamente: sincronización real GTR 4/HealthKit y Siri nativo.
