@@ -1,0 +1,13 @@
+SU SU v20 — Continuous Selfie Check-in
+
+- One continuous camera session for progress photos.
+- Front/selfie camera requested with facingMode=user.
+- Automatic order: FRONTAL -> LADO -> ESPALDA.
+- Camera stays open between the three captures.
+- Review thumbnails after capture; tap one to retake only that pose.
+- Photos remain local in IndexedDB and are included in SU SU backup.
+- Existing storage key remains: susu.
+- Cloudflare Worker remains v17; no Worker update required.
+
+Physical-device note:
+Bluetooth shutter behavior inside an iPhone PWA cannot be guaranteed until tested on the actual iPhone/remote. On-screen shutter always remains available.
