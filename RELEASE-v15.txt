@@ -1,0 +1,9 @@
+SU SU v15
+
+- AI nutrition review now labels Calories, Protein, Carbohydrates and Fat explicitly.
+- Calendar highlights the current SU SU day with a black outline.
+- Current-day highlighting respects the 02:00 day cutoff.
+- Automatic pre-migration local backup (susu-auto-backup) before upgrading older schemas.
+- Export backup version updated to 15.
+- Existing storage key remains: susu.
+- GTR 4 / Apple Health live integration remains intentionally pending.
