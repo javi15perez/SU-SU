@@ -28,3 +28,14 @@ button,.photoPicker{touch-action:manipulation}.todayGoal{margin-top:7px;font-siz
 .photoSourceActions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.photoSourceActions .primary,.photoSourceActions .secondary{min-height:58px;margin-top:0}.checkPhotoActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.checkPhotoActions .photoPicker{margin-top:0;min-height:56px;display:grid;place-items:center}@media(max-width:360px){.photoSourceActions,.checkPhotoActions{grid-template-columns:1fr}}
 
 .emptySearchStack{flex-wrap:wrap}.emptySearchStack>span{width:100%}.interpretMissing{background:#111!important;color:#fff!important}
+/* v22 calendar completion fill: protein + push-ups */
+.calDay{position:relative;overflow:hidden;isolation:isolate;background:var(--soft)}
+.calDay::before{content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:0;background:#dff5e6;transition:height .2s ease}
+.calDay.half{background:var(--soft)}
+.calDay.half::before{height:50%}
+.calDay.done{background:var(--soft)}
+.calDay.done::before{height:100%}
+.calDay.current{box-shadow:inset 0 0 0 2px #111;z-index:1}
+
+/* v23 · easier iOS-style bottom sheets */
+.sheet{position:relative;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:transform .18s ease}.sheetClose{position:sticky;z-index:4;top:0;float:right;margin:2px -5px -46px 0;width:44px;height:44px;border:0;border-radius:999px;background:#f3f3f3;color:#555;font-size:28px;line-height:40px;font-weight:400}.handle{touch-action:none}.modal{touch-action:manipulation}

@@ -1,0 +1,6 @@
+SU SU v23
+- Apple Health shortcut bridge from v22
+- Calendar 0/50/100 based on flexiones + proteina
+- Easier bottom sheets: large close button, backdrop tap, downward swipe
+- Check-in protects unsaved fields before dismissing
+- iPhone safe-area retained

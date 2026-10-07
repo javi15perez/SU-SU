@@ -1,0 +1,21 @@
+SU SU — actualización puente Apple Salud
+
+REEMPLAZA / AÑADE SOLO ESTOS ARCHIVOS EN LA RAÍZ DEL REPO:
+- index.html (reemplazar)
+- sw.js (reemplazar)
+- health-bridge.js (nuevo)
+
+No reemplaces app.js ni tus otros archivos.
+
+Qué hace:
+- Recibe datos preparados por un Atajo de iPhone mediante #health=...
+- El fragmento no se envía al servidor de GitHub Pages.
+- Conserva la clave localStorage "susu".
+- Antes de cada importación crea "susu-health-import-backup".
+- Repetir una sincronización REEMPLAZA los totales de ese día: no suma pasos/kcal dos veces.
+- Admite pasos, kcal activas, distancia, ejercicio, sueño, FC, FC reposo, peso, grasa, BMI y entrenamientos.
+- Peso/grasa/BMI se reflejan también como check-in importado.
+- Guarda fuente y fecha de sincronización.
+
+IMPORTANTE:
+Este paquete instala el receptor. El siguiente paso es crear/configurar el Atajo de Apple Salud en el iPhone.

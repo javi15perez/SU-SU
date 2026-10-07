@@ -1,0 +1,8 @@
+SU SU v22 — Apple Health Shortcut bridge candidate
+- URL receiver: ?action=healthsync&date=YYYY-MM-DD&weight=&bodyFat=&bmi=&steps=&activeKcal=&distanceKm=&exerciseMin=&sleepMin=&restingHr=&heartRate=&source=
+- Same-day sync overwrites daily health metrics instead of adding, preventing duplicate totals.
+- Weight from Apple Health is available to the weight progress chart.
+- Weekly check-in remains pending until its required manual fields are completed; imported weight does not falsely complete it.
+- Calendar: 0% neutral, 50% green fill bottom-up when either protein or push-up goal is met, 100% green when both are met.
+- Storage key remains: susu
+- Cloudflare Worker unchanged.
