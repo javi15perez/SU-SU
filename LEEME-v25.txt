@@ -1,0 +1,5 @@
+SU SU v25 — salud y objetivo calórico dinámico
+Sube TODOS los archivos de esta carpeta a la raíz del repositorio. No subas la carpeta contenedora.
+El Atajo actual solo envía pasos y peso: para kcal activas, sueño y energía en reposo habrá que ampliar el Atajo. Hasta entonces se muestra — en esos indicadores.
+El objetivo se calcula con reposo estimado (1834 x 1.10), más kcal activas disponibles, menos déficit configurable (400 kcal). Si Apple Salud envía restingKcal se usa esa cifra. Es una estimación, no una medida exacta.
+Los pasos NO se convierten ni se suman como calorías adicionales.

@@ -14,7 +14,7 @@
   function blankHealth() {
     return {
       steps:0, activeKcal:0, distanceKm:0, exerciseMin:0, sleepMin:0,
-      restingHr:0, heartRate:0, weightKg:0, bodyFatPct:0, bmi:0,
+      restingHr:0, restingKcal:0, heartRate:0, weightKg:0, bodyFatPct:0, bmi:0,
       workouts:[], source:null, sources:[], updatedAt:null
     };
   }
@@ -44,6 +44,7 @@
     if (!weight && !fat && !bmi) return;
 
     state.checkins = Array.isArray(state.checkins) ? state.checkins : [];
+    if (weight) { const previous=[...state.checkins].filter(c=>Number(c.weight)>0&&c.date<=x.date).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]; if(previous && Number(previous.weight)===weight && (new Date(x.date+'T12:00:00Z')-new Date(previous.date+'T12:00:00Z'))<7*86400000) return; }
     let existing = [...state.checkins].reverse()
       .find(c => c && c.date === x.date && c.healthImported === true);
 
@@ -98,17 +99,20 @@
       // This makes repeated Shortcut runs idempotent and avoids double counting.
       d.health = {
         ...prev,
-        steps:Math.max(0,num(x.steps)),
-        activeKcal:Math.max(0,num(x.activeKcal)),
-        distanceKm:Math.max(0,num(x.distanceKm)),
-        exerciseMin:Math.max(0,num(x.exerciseMin)),
-        sleepMin:Math.max(0,num(x.sleepMin)),
-        restingHr:Math.max(0,num(x.restingHr)),
-        heartRate:Math.max(0,num(x.heartRate)),
-        weightKg:Math.max(0,num(x.weightKg)),
-        bodyFatPct:Math.max(0,num(x.bodyFatPct)),
-        bmi:Math.max(0,num(x.bmi)),
-        workouts,
+        steps:x.steps!=null?Math.max(0,num(x.steps)):prev.steps,
+        activeKcal:x.activeKcal!=null?Math.max(0,num(x.activeKcal)):prev.activeKcal,
+        distanceKm:x.distanceKm!=null?Math.max(0,num(x.distanceKm)):prev.distanceKm,
+        exerciseMin:x.exerciseMin!=null?Math.max(0,num(x.exerciseMin)):prev.exerciseMin,
+        sleepMin:x.sleepMin!=null?Math.max(0,num(x.sleepMin)):prev.sleepMin,
+        restingHr:x.restingHr!=null?Math.max(0,num(x.restingHr)):prev.restingHr,
+        heartRate:x.heartRate!=null?Math.max(0,num(x.heartRate)):prev.heartRate,
+        weightKg:x.weightKg!=null?Math.max(0,num(x.weightKg)):prev.weightKg,
+        bodyFatPct:x.bodyFatPct!=null?Math.max(0,num(x.bodyFatPct)):prev.bodyFatPct,
+        bmi:x.bmi!=null?Math.max(0,num(x.bmi)):prev.bmi,
+        workouts:Array.isArray(x.workouts)?workouts:prev.workouts,
+        restingKcal:x.restingKcal!=null?Math.max(0,num(x.restingKcal)):prev.restingKcal,
+        weight:x.weightKg!=null?Math.max(0,num(x.weightKg)):prev.weight,
+        bodyFat:x.bodyFatPct!=null?Math.max(0,num(x.bodyFatPct)):prev.bodyFat,
         source,
         sources:uniq(Array.isArray(x.sources) ? x.sources : [source]),
         updatedAt:now
