@@ -165,6 +165,15 @@
   // Must run before app.js reads localStorage.
   consumeLaunchPayload();
 
+  // iOS Shortcuts often reuses an already open Safari tab. In that case the
+  // hash changes without reloading the page, so the startup-only bridge
+  // would silently miss the new payload. Import and refresh the UI.
+  window.addEventListener('hashchange', () => {
+    if (!(location.hash || '').startsWith('#health=')) return;
+    consumeLaunchPayload();
+    location.reload();
+  });
+
   // Tiny public API for testing from Safari dev tools / future native wrapper.
   window.SUSUHealthBridge = { importPayload };
 })();

@@ -1,0 +1,5 @@
+SU SU v27 — Corrección de sincronización Apple Salud
+
+Corrige el caso en el que Atajos abre SU SU en una pestaña de Safari ya abierta: antes el fragmento #health= no se procesaba porque no había recarga. Ahora detecta el cambio de URL, importa los datos y actualiza la pantalla.
+
+Sube todos los archivos del ZIP manteniendo la estructura. No borres los datos del navegador.
