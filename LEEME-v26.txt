@@ -1,0 +1,10 @@
+SU SU v26 — Días naturales de Apple Salud
+
+- Flexiones, dominadas y comidas: se mantiene el corte de las 02:00 (configurable).
+- Pasos, kcal activas, sueño y peso: se muestran para la fecha natural actual (00:00–23:59).
+- Objetivo dinámico de comida: usa las kcal activas de la fecha natural actual, sin sumar los pasos de nuevo.
+- Los datos anteriores no se borran ni se migran: permanecen por su fecha original.
+- Apple Salud sigue requiriendo ejecutar el Atajo. El Atajo debe generar JSON válido con una sola variable Suma en steps y otra en activeKcal.
+- Alrededor de medianoche, el objetivo calórico es provisional hasta sincronizar el nuevo día.
+
+Sube el contenido del ZIP a la raíz de SU SU; no subas el ZIP como archivo dentro de la web.
