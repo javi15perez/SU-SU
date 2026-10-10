@@ -103,7 +103,7 @@
         activeKcal:x.activeKcal!=null?Math.max(0,num(x.activeKcal)):prev.activeKcal,
         distanceKm:x.distanceKm!=null?Math.max(0,num(x.distanceKm)):prev.distanceKm,
         exerciseMin:x.exerciseMin!=null?Math.max(0,num(x.exerciseMin)):prev.exerciseMin,
-        sleepMin:x.sleepMin!=null?Math.max(0,num(x.sleepMin)):prev.sleepMin,
+        sleepMin:(x.sleepMinutes!=null||x.sleepMin!=null)?Math.max(0,num(x.sleepMinutes??x.sleepMin)):prev.sleepMin,
         restingHr:x.restingHr!=null?Math.max(0,num(x.restingHr)):prev.restingHr,
         heartRate:x.heartRate!=null?Math.max(0,num(x.heartRate)):prev.heartRate,
         weightKg:x.weightKg!=null?Math.max(0,num(x.weightKg)):prev.weightKg,
@@ -130,6 +130,8 @@
       connected:true,
       lastSync:payload.generatedAt || now,
       lastImportCount:count,
+      lastImportDates:payload.days.filter(x=>x&&validDay(x.date)).map(x=>x.date),
+      lastImportValues:payload.days.filter(x=>x&&validDay(x.date)).map(x=>({date:x.date,steps:x.steps??null,activeKcal:x.activeKcal??null})),
       sources:uniq([...allSources])
     };
 
@@ -171,7 +173,8 @@
   window.addEventListener('hashchange', () => {
     if (!(location.hash || '').startsWith('#health=')) return;
     consumeLaunchPayload();
-    location.reload();
+    // The app is already loaded: refresh its in-memory state, not just localStorage.
+    window.dispatchEvent(new CustomEvent('susu-health-imported')); 
   });
 
   // Tiny public API for testing from Safari dev tools / future native wrapper.

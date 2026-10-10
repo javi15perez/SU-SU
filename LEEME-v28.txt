@@ -1,0 +1,7 @@
+SU SU v28 — sincronización Apple Salud y diagnóstico
+
+Corrige la actualización de datos en pestañas Safari abiertas sin recargar; actualiza el estado en memoria de la app tras importar el enlace. Corrige la generación de fecha de SU SU para que no dependa del formato regional del iPhone. Añade en el panel Apple Salud la fecha consultada y el último envío recibido, para distinguir un fallo de fecha de uno de importación.
+
+Sube el contenido del ZIP sobre los archivos actuales. No borres datos de Safari ni desinstales la aplicación. Después ejecuta el Atajo y abre la tarjeta Pasos.
+
+No se modifican registros existentes ni el Atajo.

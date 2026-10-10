@@ -1,0 +1,7 @@
+SU SU v29 — Corrección sueño Apple Salud
+
+Sube los archivos de este ZIP a tu sitio, sustituyendo los anteriores.
+
+Arreglo: el puente acepta sleepMinutes (Atajos) y sleepMin (formato anterior).
+Se conservan los datos del navegador; no borres datos de Safari.
+Después de actualizar, vuelve a ejecutar el atajo para importar el sueño de hoy.
