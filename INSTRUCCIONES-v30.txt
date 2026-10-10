@@ -1,0 +1,7 @@
+SU SU v30 — Importar Apple Salud en la PWA instalada
+
+1. Subir el contenido de este ZIP al repositorio (archivos en raíz).
+2. En Atajos, añadir una acción «Copiar al portapapeles» inmediatamente después del primer bloque «Texto» que construye el JSON, y antes de «Codificar Texto con URL». Seleccionar como entrada ese Texto JSON. El resto del atajo se conserva.
+3. Ejecutar el atajo; abrir SU SU desde su icono instalado; pulsar las tarjetas de Apple Salud > «Importar datos de Apple Salud» > «Pegar desde portapapeles» > «Importar datos». Si iOS bloquea el portapapeles, mantener pulsado el campo y elegir Pegar.
+
+La PWA y Safari pueden tener almacenamiento separado. Esta importación escribe en la PWA abierta. No elimina comidas ni entrenamientos. No es sincronización automática: necesita importar cada vez que quieras actualizar datos.

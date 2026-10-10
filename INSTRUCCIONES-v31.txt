@@ -1,0 +1,10 @@
+SU SU v31 — Backup y Apple Salud
+
+1. Sube los archivos del ZIP al directorio principal de GitHub Pages, sustituyendo los existentes.
+2. NO borres la aplicación instalada, NO borres los datos de Safari.
+3. Al abrir SU SU, entra en Apple Salud: el título debe mostrar v31 y el botón «Importar datos de Apple Salud (v31)».
+4. Si sigue mostrando la versión anterior, la PWA aún está usando la caché antigua; no desinstales la app ni borres datos.
+5. En Ajustes, «Exportar backup» abre una pantalla con tres opciones: Compartir, Descargar y Copiar texto.
+6. El atajo ya copia el JSON al portapapeles; en la app abre Apple Salud > Importar datos > Pegar desde portapapeles > Importar datos.
+
+Esta versión no modifica ni borra el localStorage existente.
