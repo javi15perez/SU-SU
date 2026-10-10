@@ -63,7 +63,7 @@
     existing.healthUpdatedAt = now;
   }
 
-  function importPayload(payload) {
+  function importPayload(payload, options = {}) {
     if (!payload || Number(payload.schemaVersion) !== HEALTH_SCHEMA || !Array.isArray(payload.days)) {
       throw new Error('Formato de Salud no válido');
     }
@@ -72,6 +72,12 @@
     const state = raw ? JSON.parse(raw) : {};
     if (!state || typeof state !== 'object' || Array.isArray(state)) throw new Error('Datos SU SU no válidos');
 
+    if (options.cloud) {
+      if (!payload.exportedAt || !Number.isFinite(Date.parse(payload.exportedAt))) throw new Error('Fecha de exportación inválida');
+      if (state.days && (typeof state.days !== 'object' || Array.isArray(state.days))) throw new Error('Almacenamiento de días inválido; no se modifica');
+      if (state.healthSync?.cloudExportedAt && payload.exportedAt <= state.healthSync.cloudExportedAt) return 0;
+      if (raw && localStorage.getItem('susu-health-cloud-baseline-v33') === null) localStorage.setItem('susu-health-cloud-baseline-v33', raw);
+    }
     const backup = JSON.stringify(state);
     state.days = state.days && typeof state.days === 'object' ? state.days : {};
     state.healthSync = state.healthSync && typeof state.healthSync === 'object' ? state.healthSync : {};
@@ -118,7 +124,7 @@
         updatedAt:now
       };
       state.days[x.date] = d;
-      upsertBodyMeasurement(state,x,source,now);
+      if (!options.cloud) upsertBodyMeasurement(state,x,source,now);
       count++;
     }
 
@@ -128,7 +134,8 @@
       watch:state.healthSync.watch || 'Amazfit GTR 4',
       scale:state.healthSync.scale || 'Xiaomi S400',
       connected:true,
-      lastSync:payload.generatedAt || now,
+      lastSync:payload.exportedAt || payload.generatedAt || now,
+      ...(options.cloud ? {cloudExportedAt:payload.exportedAt,cloudReceivedAt:payload.receivedAt} : {}),
       lastImportCount:count,
       lastImportDates:payload.days.filter(x=>x&&validDay(x.date)).map(x=>x.date),
       lastImportValues:payload.days.filter(x=>x&&validDay(x.date)).map(x=>({date:x.date,steps:x.steps??null,activeKcal:x.activeKcal??null})),
