@@ -1,0 +1,4 @@
+SU SU v32 — Corrige los botones de ventanas emergentes.
+CAUSA: modal() dibujaba botones sin llamar a bindSheet(), por lo que Exportar backup e Importar Apple Salud no respondían.
+Sube todos los archivos de este ZIP sustituyendo los existentes. No desinstales la PWA ni borres sus datos.
+Tras ver «versión 32» en Ajustes, prueba Exportar backup.
