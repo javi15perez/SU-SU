@@ -14,5 +14,5 @@ assert.equal(ctx.weeklyNutrition('2026-10-19').total,0);
 delete state.days['2026-10-13'];w=ctx.weeklyNutrition('2026-10-14');assert.equal(w.total,3900);assert.equal(w.average,1300);assert.equal(w.logged,2);assert.match(ctx.weeklyNutritionHTML(),/Sin registrar/);assert.match(ctx.weeklyNutritionHTML(),/cuentan como 0/);
 state.days={'2025-12-29':{meals:[{kcal:1000}]},'2026-01-01':{meals:[{kcal:2000}]}};
 w=ctx.weeklyNutrition('2026-01-01');assert.equal(w.elapsed,4);assert.equal(w.total,3000);assert.equal(w.average,750);assert.equal(w.rows[0].date,'2025-12-29');
-assert.match(source,/SU SU · versión 34\.1/);assert.match(source,/>v34\.1<\/small>/);
+assert.match(source,/SU SU · versión 35/);assert.match(source,/>v35<\/small>/);
 console.log('PASS: partial week, Monday reset, missing entries, future exclusion, year boundary, visible v34.');

@@ -119,6 +119,8 @@
         activeKcal:x.activeKcal!=null?Math.max(0,num(x.activeKcal)):prev.activeKcal,
         distanceKm:x.distanceKm!=null?Math.max(0,num(x.distanceKm)):prev.distanceKm,
         exerciseMin:x.exerciseMin!=null?Math.max(0,num(x.exerciseMin)):prev.exerciseMin,
+        stepsReceived:x.steps!=null?true:prev.stepsReceived,
+        sleepReceived:(x.sleepMinutes!=null||x.sleepMin!=null)?true:prev.sleepReceived,
         sleepMin:(x.sleepMinutes!=null||x.sleepMin!=null)?Math.max(0,num(x.sleepMinutes??x.sleepMin)):prev.sleepMin,
         restingHr:x.restingHr!=null?Math.max(0,num(x.restingHr)):prev.restingHr,
         heartRate:x.heartRate!=null?Math.max(0,num(x.heartRate)):prev.heartRate,

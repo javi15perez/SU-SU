@@ -3,6 +3,14 @@ function installHealthSync({ onImport, getLastExport = () => '', mount = documen
   if (typeof onImport !== 'function') throw new Error('Provide the existing SU SU JSON importer as onImport.');
   const endpoint = 'https://susu-health-sync.javiperezespanol.workers.dev/v1/health';
   const storageKey = 'susu.health.read-token.v1';
+  const shortcutKey = 'susu.health.shortcut-name.v1';
+  const shortcutForm = document.createElement('form');
+  const shortcutLabel = document.createElement('label'); shortcutLabel.textContent = 'Atajo de sincronización ';
+  const shortcutInput = document.createElement('input'); shortcutInput.className = 'input'; shortcutInput.autocomplete = 'off';
+  try { shortcutInput.value = localStorage.getItem(shortcutKey) || 'SU SU Salud 07'; } catch { shortcutInput.value = 'SU SU Salud 07'; }
+  const shortcutSave = document.createElement('button'); shortcutSave.type = 'submit'; shortcutSave.className = 'secondary'; shortcutSave.textContent = 'Guardar nombre del Atajo';
+  shortcutLabel.append(shortcutInput); shortcutForm.append(shortcutLabel, shortcutSave);
+  shortcutForm.addEventListener('submit', event => { event.preventDefault(); const name = shortcutInput.value.trim(); if (!name) { status.textContent = 'Escribe el nombre exacto del Atajo instalado.'; return; } try { localStorage.setItem(shortcutKey, name); status.textContent = 'Atajo guardado: ' + name; } catch { status.textContent = 'El nombre solo se conservará mientras la app esté abierta.'; } });
   const panel = document.createElement('section');
   panel.setAttribute('aria-label', 'Sincronización de Apple Salud');
   const status = document.createElement('p'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
@@ -18,7 +26,7 @@ function installHealthSync({ onImport, getLastExport = () => '', mount = documen
   const forget = document.createElement('button'); forget.type = 'button'; forget.textContent = 'Olvidar clave';
   input.className = 'input'; save.className = sync.className = 'primary'; retrieve.className = forget.className = 'secondary'; status.className = 'note';
   const privacy = document.createElement('p'); privacy.className = 'note'; privacy.textContent = 'Recordar guarda la clave de lectura en este dispositivo. Cualquier script del mismo sitio podría leerla. La clave de envío solo debe estar en tu Atajo.';
-  form.append(label, rememberLabel, privacy, save); panel.append(form, sync, retrieve, forget, status); mount.append(panel);
+  form.append(label, rememberLabel, privacy, save); panel.append(form, sync, retrieve, forget, status); panel.prepend(shortcutForm); mount.append(panel);
   let token = ''; try { token = localStorage.getItem(storageKey) || ''; } catch {}
   let pendingRefresh = false;
   let busy = false, lastAttempt = 0, lastReceived = '', generation = 0, returningFromShortcut = false;
@@ -62,8 +70,8 @@ function installHealthSync({ onImport, getLastExport = () => '', mount = documen
   forget.addEventListener('click', () => { generation++; token = ''; lastReceived = ''; try { localStorage.removeItem(storageKey); } catch {} form.hidden = false; status.textContent = 'Clave olvidada. Los datos ya importados permanecen en SU SU.'; });
   function launchShortcut() {
     returningFromShortcut = true;
-    status.textContent = 'Ejecuta el Atajo y vuelve a SU SU. Recuperaremos su envío al regresar.';
-    window.location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent('Buscar muestras de Salud');
+    status.textContent = 'Abriendo ' + (shortcutInput.value.trim() || 'SU SU Salud 07') + '. Vuelve a SU SU al terminar el envío.';
+    window.location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent(shortcutInput.value.trim() || 'SU SU Salud 07');
   }
   sync.addEventListener('click', launchShortcut);
   retrieve.addEventListener('click', () => void refresh(true));

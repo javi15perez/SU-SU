@@ -1,0 +1,5 @@
+SU SU v35
+Sueño: 0 min cuando el Atajo envía cero; — cuando no se ha recibido ese dato.
+Sincronizar ahora usa SU SU Salud 07 por defecto; el nombre se puede configurar.
+El cálculo de sueño del Atajo sigue pendiente de comparar con Salud en el iPhone.
+Subir el contenido de esta carpeta para actualizar la aplicación.

@@ -37,16 +37,31 @@ assert.deepEqual(state.days['2026-10-13'].meals,initial.days['2026-10-13'].meals
 assert.deepEqual(state.checkins,initial.checkins);
 assert.equal(local.get('susu-health-cloud-baseline-v33'),JSON.stringify(initial));
 // Changing the token while the first fetch is pending must schedule a new request.
-class Element {constructor(){this.handlers={};this.value='';} setAttribute(){} append(){} addEventListener(k,f){this.handlers[k]=f;}}
+class Element {constructor(){this.handlers={};this.value='';} setAttribute(){} append(){} prepend(){} addEventListener(k,f){this.handlers[k]=f;}}
 let calls=[];let resolveFirst;
 const doc={body:new Element(),createElement:()=>new Element(),addEventListener(){},visibilityState:'visible'};
 const legacy={schemaVersion:1,source:'Apple Health',syncedAt:data.exportedAt,days:data.days};
 let imported=0;
-const cloud={document:doc,window:{addEventListener(){}},localStorage:{getItem:()=>env.READ_TOKEN,removeItem(){},setItem(){}},AbortController,setTimeout,clearTimeout,Date,fetch:async(_url,opts)=>{calls.push(opts.headers.Authorization);if(calls.length===1)await new Promise(r=>resolveFirst=r);return {ok:true,json:async()=>({...legacy})};}};
+const cloud={document:doc,window:{addEventListener(){},location:{}},localStorage:{getItem:k=>k==='susu.health.read-token.v1'?env.READ_TOKEN:null,removeItem(){},setItem(){}},AbortController,setTimeout,clearTimeout,Date,fetch:async(_url,opts)=>{calls.push(opts.headers.Authorization);if(calls.length===1)await new Promise(r=>resolveFirst=r);return {ok:true,json:async()=>({...legacy})};}};
 vm.runInNewContext(fs.readFileSync(new URL('../health-cloud.js',import.meta.url),'utf8').replace('label.append(input);','globalThis.testInput=input; label.append(input);').replace("form.addEventListener('submit',", "globalThis.testForm=form; form.addEventListener('submit',"),cloud);
-cloud.window.installHealthSync({onImport:async payload=>{assert.equal(payload.exportedAt,legacy.syncedAt); imported++;}});
+const installed=cloud.window.installHealthSync({onImport:async payload=>{assert.equal(payload.exportedAt,legacy.syncedAt); imported++;}});
 cloud.testInput.value='n'.repeat(43);cloud.testForm.handlers.submit({preventDefault(){}});resolveFirst();
 await new Promise(r=>setTimeout(r,20));
 assert.deepEqual(calls,[`Bearer ${env.READ_TOKEN}`,`Bearer ${'n'.repeat(43)}`]);
 assert.equal(imported,1);
+installed.launchShortcut();
+assert.equal(cloud.window.location.href,'shortcuts://run-shortcut?name=SU%20SU%20Salud%2007');
 console.log('PASS: Worker authorization, CORS, validation, size limit; bridge preservation/idempotency; token-change retry.');
+
+const sleepDay='2026-10-14';
+bridge.importPayload({schemaVersion:1,source:'Apple Health',exportedAt:'2026-10-14T01:00:00Z',days:[{date:sleepDay,steps:215}]});
+assert.notEqual(JSON.parse(local.get('susu')).days[sleepDay].health.sleepReceived,true);
+bridge.importPayload({schemaVersion:1,source:'Apple Health',exportedAt:'2026-10-14T01:01:00Z',days:[{date:sleepDay,sleepMinutes:0}]});
+assert.equal(JSON.parse(local.get('susu')).days[sleepDay].health.sleepReceived,true);
+assert.equal(JSON.parse(local.get('susu')).days[sleepDay].health.sleepMin,0);
+const appSource=fs.readFileSync(new URL('../app.js',import.meta.url),'utf8');
+const display={};vm.runInNewContext(appSource.slice(appSource.indexOf('function sleepText('),appSource.indexOf('function compactHealthStats(')),display);
+assert.equal(display.sleepText({sleepMin:0}),'—');
+assert.equal(display.sleepText({sleepMin:0,sleepReceived:true}),'0 min');
+assert.equal(display.sleepText({sleepMin:476,sleepReceived:true}),'7 h 56 min');
+console.log('PASS: missing sleep differs from explicitly received zero, including display.');
