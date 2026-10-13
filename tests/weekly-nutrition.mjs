@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import fs from 'node:fs';
+const source=fs.readFileSync(new URL('../app.js',import.meta.url),'utf8');
+const names=['calendarDayKey','dayTotals','keyDate','mondayOfKey','weeklyNutrition','weeklyNutritionHTML'];
+const functions=names.map(name=>{const start=source.indexOf('function '+name+'(');const end=source.indexOf('\nfunction ',start+1);return source.slice(start,end);}).join('\n');
+const state={days:{'2026-10-12':{meals:[{kcal:1800},{kcal:200}]},'2026-10-13':{meals:[{kcal:2100}]},'2026-10-14':{meals:[{kcal:1900}]},'2026-10-15':{meals:[{kcal:9999}]}}};
+const ctx={s:state,n:v=>Number(v)||0,today:()=> '2026-10-14'};
+vm.createContext(ctx);vm.runInContext(functions,ctx);
+let w=ctx.weeklyNutrition('2026-10-14');assert.equal(w.total,6000);assert.equal(w.average,2000);assert.equal(w.elapsed,3);assert.equal(w.logged,3);
+assert.equal(ctx.weeklyNutrition('2026-10-12').average,2000);
+assert.equal(ctx.weeklyNutrition('2026-10-18').elapsed,7);
+assert.equal(ctx.weeklyNutrition('2026-10-19').total,0);
+delete state.days['2026-10-13'];w=ctx.weeklyNutrition('2026-10-14');assert.equal(w.total,3900);assert.equal(w.average,1300);assert.equal(w.logged,2);assert.match(ctx.weeklyNutritionHTML(),/Sin registrar/);assert.match(ctx.weeklyNutritionHTML(),/cuentan como 0/);
+state.days={'2025-12-29':{meals:[{kcal:1000}]},'2026-01-01':{meals:[{kcal:2000}]}};
+w=ctx.weeklyNutrition('2026-01-01');assert.equal(w.elapsed,4);assert.equal(w.total,3000);assert.equal(w.average,750);assert.equal(w.rows[0].date,'2025-12-29');
+assert.match(source,/SU SU · versión 34/);assert.match(source,/>v34<\/small>/);
+console.log('PASS: partial week, Monday reset, missing entries, future exclusion, year boundary, visible v34.');

@@ -1,0 +1,21 @@
+SU SU v34
+
+NUEVO
+Resumen discreto «Esta semana» debajo de las kcal de comida en Hoy y en Progreso.
+Media diaria y total de kcal CONSUMIDAS, desde el lunes hasta hoy.
+Ejemplo: miércoles, 6.000 kcal acumuladas → 2.000 kcal/día (divide entre 3, no 7).
+Al tocarlo muestra los días y cuántos tienen comidas registradas.
+Los días sin registrar cuentan como cero: se avisa al desplegar el resumen.
+Hoy está incluido aunque aún no haya terminado. Respeta la hora de corte SU SU.
+La semana se reinicia el lunes. No modifica comidas ni datos históricos.
+Ajustes y Apple Salud muestran versión 34; caché y archivos web usan v34.
+Conserva las correcciones de Salud v33.1; la prueba real del Atajo sigue pendiente.
+
+ACTUALIZACIÓN
+Exporta un backup en Ajustes. Sube los archivos dentro de esta carpeta a la
+raíz de la web, sustituyendo los anteriores, y guarda los cambios.
+No subas la carpeta contenedora por encima de index.html.
+No desinstales la PWA ni borres sus datos. Cierra y vuelve a abrir SU SU.
+Comprueba Ajustes → SU SU · versión 34 y la fila «Esta semana».
+Los archivos Worker son código separado para Cloudflare: subirlos a la web
+no los despliega. No sustituir el Worker de comida por el Worker de Salud.
