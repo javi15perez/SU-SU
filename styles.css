@@ -42,3 +42,21 @@ button,.photoPicker{touch-action:manipulation}.todayGoal{margin-top:7px;font-siz
 
 /* v25: compact health row, under push-ups */
 .healthStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;width:100%;background:transparent;border:0;padding:9px 0 4px;text-align:center;color:inherit;cursor:pointer}.healthMini{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:13px;padding:13px 3px 12px;background:#f7f7f7}.healthMini strong{font-size:clamp(13px,3.6vw,20px);font-weight:760;letter-spacing:-.045em;white-space:nowrap}.healthMini small{font-size:clamp(8px,2.1vw,10px);letter-spacing:.045em;font-weight:700;color:#777}.healthMini.blue{background:#f0f5fc;color:#32669b}.healthMini.orange{background:#fcf4ed;color:#a56537}.healthMini.purple{background:#f6f1fb;color:#79599d}.healthMini.green{background:#eef8f2;color:#438367}.healthHint{text-align:center;color:#999;font-size:10px;padding:7px 0 16px}.energyBreakdown{font-size:11px;color:#888;line-height:1.65;margin-top:9px}.energyBreakdown span{color:#a26c4d}
+
+/* v34: quiet weekly food summary, with native accessible disclosure. */
+.weeklyNutrition{margin:16px 0;border:1px solid #e9e9e9;border-radius:14px;background:#fafafa;text-align:left;color:#333}
+.weeklyNutrition summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;cursor:pointer;list-style:none}
+.weeklyNutrition summary::-webkit-details-marker{display:none}
+.weeklyNutrition summary::after{content:'⌄';font-size:17px;color:#777}
+.weeklyNutrition[open] summary::after{content:'⌃'}
+.weeklyNutritionTitle{font-size:13px;font-weight:600;flex:1}
+.weeklyNutritionTitle small{display:block;font-size:10px;font-weight:400;color:#777;margin-top:3px}
+.weeklyNutritionMetrics{display:flex;gap:18px;text-align:right}
+.weeklyNutritionMetrics b{display:block;font-size:17px;line-height:1.3;font-variant-numeric:tabular-nums}
+.weeklyNutritionMetrics small{display:block;font-size:10px;color:#777;margin-top:2px}
+.weeklyNutritionBody{padding:0 14px 12px;border-top:1px solid #e9e9e9}
+.weeklyNutritionBody p{font-size:11px;line-height:1.5;color:#777;margin:12px 0}
+.weeklyNutritionDay{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:12px;border-bottom:1px solid #eee}
+.weeklyNutritionDay span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.weeklyNutritionBody .weeklyNutritionCoverage{margin-bottom:0}
+@media(max-width:360px){.weeklyNutritionMetrics{gap:10px}.weeklyNutrition summary{padding:12px;gap:8px}.weeklyNutritionMetrics b{font-size:15px}}

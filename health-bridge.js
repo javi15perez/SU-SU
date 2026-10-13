@@ -71,7 +71,7 @@
     if (options.cloud) {
       const seen = new Set();
       const fields = ['steps','activeKcal','sleepMinutes','sleepMin','weightKg','distanceKm','exerciseMin','restingHr','heartRate','bodyFatPct','bmi','restingKcal'];
-      if (payload.source !== 'Apple Health' || !payload.days.length || payload.days.length > 31) throw new Error('Datos de Salud inválidos');
+      if (payload.source !== 'Apple Health' || !payload.days.length || payload.days.length > 3660) throw new Error('Datos de Salud inválidos');
       for (const day of payload.days) {
         if (!day || !validDay(day.date) || seen.has(day.date)) throw new Error('Fecha de Salud inválida');
         seen.add(day.date);

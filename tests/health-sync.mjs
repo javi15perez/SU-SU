@@ -40,10 +40,13 @@ assert.equal(local.get('susu-health-cloud-baseline-v33'),JSON.stringify(initial)
 class Element {constructor(){this.handlers={};this.value='';} setAttribute(){} append(){} addEventListener(k,f){this.handlers[k]=f;}}
 let calls=[];let resolveFirst;
 const doc={body:new Element(),createElement:()=>new Element(),addEventListener(){},visibilityState:'visible'};
-const cloud={document:doc,window:{addEventListener(){}},localStorage:{getItem:()=>env.READ_TOKEN,removeItem(){},setItem(){}},AbortController,setTimeout,clearTimeout,Date,fetch:async(_url,opts)=>{calls.push(opts.headers.Authorization);if(calls.length===1)await new Promise(r=>resolveFirst=r);return {ok:true,json:async()=>data};}};
+const legacy={schemaVersion:1,source:'Apple Health',syncedAt:data.exportedAt,days:data.days};
+let imported=0;
+const cloud={document:doc,window:{addEventListener(){}},localStorage:{getItem:()=>env.READ_TOKEN,removeItem(){},setItem(){}},AbortController,setTimeout,clearTimeout,Date,fetch:async(_url,opts)=>{calls.push(opts.headers.Authorization);if(calls.length===1)await new Promise(r=>resolveFirst=r);return {ok:true,json:async()=>({...legacy})};}};
 vm.runInNewContext(fs.readFileSync(new URL('../health-cloud.js',import.meta.url),'utf8').replace('label.append(input);','globalThis.testInput=input; label.append(input);').replace("form.addEventListener('submit',", "globalThis.testForm=form; form.addEventListener('submit',"),cloud);
-cloud.window.installHealthSync({onImport:async()=>{}});
+cloud.window.installHealthSync({onImport:async payload=>{assert.equal(payload.exportedAt,legacy.syncedAt); imported++;}});
 cloud.testInput.value='n'.repeat(43);cloud.testForm.handlers.submit({preventDefault(){}});resolveFirst();
 await new Promise(r=>setTimeout(r,20));
 assert.deepEqual(calls,[`Bearer ${env.READ_TOKEN}`,`Bearer ${'n'.repeat(43)}`]);
+assert.equal(imported,1);
 console.log('PASS: Worker authorization, CORS, validation, size limit; bridge preservation/idempotency; token-change retry.');

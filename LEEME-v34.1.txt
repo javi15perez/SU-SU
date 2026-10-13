@@ -1,0 +1,19 @@
+SU SU v34.1
+Comidas: reintenta una vez si Gemini está saturado (503) o limitado (429),
+incluido el error upstream que el Worker devuelve dentro de un HTTP 502.
+Muestra el motivo si sigue fallando. No garantiza disponibilidad de Google.
+Salud: acepta syncedAt del Worker original de Cowork; la v34 exigía
+exportedAt y receivedAt que ese Worker no devolvía.
+Conserva resumen semanal y muestra versión 34.1 en Ajustes.
+
+El Worker original encontrado en Descargas no acepta exportedAt en POST.
+El Atajo debe enviar solo schemaVersion, source y days. En el Atajo
+«Buscar muestras de Salud», quitar exportedAt del cuerpo de la petición,
+no del JSON de importación manual. No cambiar Authorization.
+No desplegar cloudflare-health-worker.mjs sobre el existente: usa otra
+clave KV y no es necesario con la compatibilidad de esta versión.
+La fecha de days debe ser yyyy-MM-dd y las métricas números sin unidades.
+La prueba de las consultas de Salud requiere el iPhone: Mac no las soporta.
+
+Subir los archivos web dentro de esta carpeta a la raíz, sustituyendo los
+anteriores. Guardar cambios. No borrar datos de la PWA ni desinstalarla.

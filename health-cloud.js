@@ -20,10 +20,12 @@ function installHealthSync({ onImport, getLastExport = () => '', mount = documen
   const privacy = document.createElement('p'); privacy.className = 'note'; privacy.textContent = 'Recordar guarda la clave de lectura en este dispositivo. Cualquier script del mismo sitio podría leerla. La clave de envío solo debe estar en tu Atajo.';
   form.append(label, rememberLabel, privacy, save); panel.append(form, sync, retrieve, forget, status); mount.append(panel);
   let token = ''; try { token = localStorage.getItem(storageKey) || ''; } catch {}
+  let pendingRefresh = false;
   let busy = false, lastAttempt = 0, lastReceived = '', generation = 0, returningFromShortcut = false;
   const messages = { unauthorized: 'La clave de lectura no es válida.', no_data: 'Todavía no hay datos. Ejecuta el Atajo en el iPhone.', configuration_missing: 'Falta configurar el Worker.', temporarily_unavailable: 'Datos pendientes de propagación. Prueba de nuevo en un minuto.' };
   async function refresh(manual = false) {
-    if (busy || (!manual && Date.now() - lastAttempt < 60000)) return;
+    if (busy) { if (manual) pendingRefresh = true; return; }
+    if (!manual && Date.now() - lastAttempt < 60000) return;
     if (!token) { form.hidden = false; status.textContent = 'Introduce tu clave privada de lectura para conectar.'; return; }
     busy = true; lastAttempt = Date.now(); retrieve.disabled = true; status.textContent = 'Recuperando el último envío…';
     const currentGeneration = generation;
@@ -31,19 +33,24 @@ function installHealthSync({ onImport, getLastExport = () => '', mount = documen
     try {
       const response = await fetch(endpoint, { method: 'GET', headers: { Authorization: `Bearer ${token}` }, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer', signal: controller.signal });
       const data = await response.json();
-      if (!response.ok) throw new Error(messages[data.error] || 'No se ha podido sincronizar. Conservamos tus datos actuales.');
+      // Cowork's original Worker stores the upload timestamp as syncedAt.
+      if (data.syncedAt && !data.exportedAt && !data.receivedAt) {
+        data.exportedAt = data.syncedAt; data.receivedAt = data.syncedAt;
+      }
+      if (response.ok && Array.isArray(data.days) && data.days.length === 0) throw new Error(messages.no_data);
+      if (!response.ok) throw new Error(response.status === 401 ? messages.unauthorized : messages[data.error] || 'No se ha podido sincronizar. Conservamos tus datos actuales.');
       if (currentGeneration !== generation) return;
       if (data.schemaVersion !== 1 || data.source !== 'Apple Health' || !Array.isArray(data.days) || !Number.isFinite(Date.parse(data.receivedAt)) || !Number.isFinite(Date.parse(data.exportedAt))) throw new Error('Respuesta inválida. Conservamos tus datos actuales.');
       if (Date.now() - Date.parse(data.exportedAt) > 48 * 3600000) throw new Error('El último envío tiene más de 48 horas. Ejecuta el Atajo para actualizarlo.');
       const watermark = getLastExport() || lastReceived;
-      if (!watermark || data.exportedAt > watermark) {
+      if (!watermark || Date.parse(data.exportedAt) > Date.parse(watermark)) {
         await onImport({ schemaVersion: 1, source: 'Apple Health', days: data.days, exportedAt: data.exportedAt, receivedAt: data.receivedAt });
         lastReceived = data.exportedAt;
       } else lastReceived = watermark;
       status.textContent = `Último envío recibido: ${new Date(lastReceived).toLocaleString()}. Si acabas de ejecutar el Atajo, espera un minuto y vuelve a sincronizar.`;
       form.hidden = true;
     } catch (error) { if (currentGeneration === generation) status.textContent = error.name === 'AbortError' ? 'La conexión ha tardado demasiado. Prueba de nuevo.' : (error instanceof TypeError ? 'Sin conexión. Conservamos tus datos actuales.' : error.message); }
-    finally { clearTimeout(timeout); busy = false; retrieve.disabled = false; }
+    finally { clearTimeout(timeout); busy = false; retrieve.disabled = false; if (pendingRefresh) { pendingRefresh = false; void refresh(true); } }
   }
   form.addEventListener('submit', event => {
     event.preventDefault();

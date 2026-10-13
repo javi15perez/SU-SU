@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const source=fs.readFileSync(new URL('../app.js',import.meta.url),'utf8');
+const start=source.indexOf('async function foodAIRequest('),end=source.indexOf('async function analyzeMeal(',start);
+let responses=[],calls=0;
+const ctx={s:{profile:{geminiEndpoint:'https://example.test'}},fetch:async()=>{calls++;return responses.shift()},setTimeout:fn=>fn(),DOMException};
+vm.createContext(ctx);vm.runInContext(source.slice(start,end),ctx);
+const response=(http,status)=>new Response(JSON.stringify({status}),{status:http});
+responses=[response(502,503),response(200,0)];assert.equal((await ctx.foodAIRequest({text:'test'})).status,200);assert.equal(calls,2);
+calls=0;responses=[response(502,503),response(502,503)];await assert.rejects(ctx.foodAIRequest({text:'test'}),/saturada/);assert.equal(calls,2);
+calls=0;responses=[response(401,401)];await assert.rejects(ctx.foodAIRequest({text:'test'}),/no ha podido/);assert.equal(calls,1);
+console.log('PASS: transient upstream 503 retries, persistent overload message, no retry on permanent errors.');
