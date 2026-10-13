@@ -1,0 +1,94 @@
+SU SU v33.1 — conexión Apple Salud / Atajos
+
+ESTADO DE LA REVISIÓN
+La v33 del ZIP ya tenía health-cloud.js, importador, botón para ejecutar
+«Buscar muestras de Salud», recuperación al abrir/regresar y respaldo local.
+No contenía el Worker de Salud ni un archivo .shortcut instalable.
+cloudflare-worker-v13.js es de IA de comida: NO es el Worker de Salud.
+No se ha accedido a GitHub ni modificado ningún servicio publicado.
+Esta revisión se ha probado localmente; falta la prueba real desde el iPhone.
+
+CORRECCIONES
+- Una nueva clave introducida durante una petición pendiente se vuelve a
+  intentar al terminar; antes podía quedarse sin sincronizar.
+- Comparación de exportaciones por fecha real, no por orden de cadenas.
+- Rechazo de fechas de calendario imposibles en el importador.
+- Nueva caché PWA para cargar los archivos corregidos.
+- Worker de Salud separado con autorización distinta para lectura y envío,
+  validación, CORS con Authorization y tamaño máximo de petición.
+
+WORKER (solo si el que ya está desplegado no cumple este contrato)
+No sustituir el Worker existente sin revisar antes sus variables y binding:
+este ZIP no permite conocer cómo lo configuró Cowork.
+Código: cloudflare-health-worker.mjs.
+Ruta: /v1/health. Binding KV: HEALTH_KV.
+Secrets: READ_TOKEN y WRITE_TOKEN, distintos, cada uno 43 caracteres
+base64url (32 bytes aleatorios). Mantener los existentes si son compatibles.
+No poner secretos en archivos públicos, URLs, capturas ni repositorios.
+READ_TOKEN va únicamente en el panel Apple Salud de SU SU.
+WRITE_TOKEN va únicamente en el Atajo.
+El Worker guarda el último envío completo; no fusiona envíos parciales.
+No lanzar dos automatizaciones a la vez ni enviar más de una vez por minuto.
+KV puede tardar 60 segundos o más en mostrar un envío en otra ubicación:
+https://developers.cloudflare.com/kv/concepts/how-kv-works/
+Si se cambia la URL del Worker, cambiar endpoint en health-cloud.js.
+El origen permitido está configurado para https://javi15perez.github.io.
+
+ADAPTAR EL ATAJO EXISTENTE «Buscar muestras de Salud»
+Conservar las consultas que ya funcionan. No hace falta empezar de cero.
+1. Preparar un Diccionario por día con date (yyyy-MM-dd, fecha LOCAL),
+   steps (número), activeKcal (número), sleepMinutes (número), weightKg
+   (número). Los nombres distinguen mayúsculas. No usar texto «8.000 pasos».
+   Omitir un campo si no se pudo leer; 0 significa un cero real.
+2. Pasos y calorías activas son el total desde las 00:00 locales hasta
+   ahora. No sumar simultáneamente muestras del reloj y del iPhone que
+   se solapen. Elegir una fuente coherente y verificar contra Apple Salud.
+3. Sueño: sumar solo intervalos dormidos, no «en cama» junto a las fases.
+   Evitar intervalos solapados entre dispositivos. Asignar la noche a la
+   fecha del despertar; la búsqueda debe incluir la noche anterior.
+4. Peso: último dato en kg, no suma ni promedio. Si tiene fecha anterior,
+   incluirlo en otro Diccionario con su fecha real y solo weightKg;
+   no inventar una medición de hoy. Incluir ese día también en el envío.
+5. Crear una Lista con los Diccionarios de los días. Para recuperar ayer,
+   calcularlo por separado y añadirlo; cada envío debe incluir el conjunto
+   completo que quieres importar (máximo 31 días, sin fechas repetidas).
+6. Crear el Diccionario raíz:
+   schemaVersion = número 1
+   source = texto Apple Health
+   exportedAt = fecha actual en ISO 8601 con zona horaria
+   days = Lista anterior (lista de diccionarios, no texto JSON)
+7. «Obtener contenido de URL»:
+   URL https://susu-health-sync.javiperezespanol.workers.dev/v1/health
+   Método POST
+   Cabecera Authorization: Bearer [tu clave privada de ENVÍO]
+   Cabecera Content-Type: application/json
+   Cuerpo JSON con los cuatro campos del Diccionario raíz. Insertar la
+   variable Lista en days; no pegarla como una cadena de texto.
+   Guía Apple: https://support.apple.com/guide/shortcuts/apd58d46713f/ios
+8. Leer el Diccionario de respuesta. Solo mostrar «Enviado» si ok es
+   verdadero; si hay error, mostrar ese código sin mostrar la clave.
+   No abrir SU SU automáticamente si se ejecuta desde una automatización.
+9. En SU SU, tocar las estadísticas Apple Salud, introducir la clave de
+   LECTURA y conectar. Volver tras ejecutar el Atajo. Si aún aparece el
+   envío anterior, esperar y pulsar «Recuperar último envío».
+
+EJEMPLO DE CUERPO (fecha/exportedAt deben generarse al ejecutar)
+{"schemaVersion":1,"source":"Apple Health","exportedAt":"FECHA_ISO_ACTUAL","days":[{"date":"FECHA_LOCAL_YYYY-MM-DD","steps":1200,"activeKcal":85.5,"sleepMinutes":420,"weightKg":75.2}]}
+
+PRUEBA FINAL EN IPHONE
+Exportar backup desde Ajustes antes de actualizar la PWA.
+Instalar los archivos web corregidos en el alojamiento habitual, sin borrar
+los datos de la PWA. Los archivos Worker, tests y esta guía no son necesarios
+para servir la aplicación.
+Ejecutar el Atajo manualmente. Comprobar respuesta ok y los cuatro datos
+contra Salud. Repetir: los totales se sustituyen, no se duplican.
+Cerrar y reabrir SU SU: debe recuperar el último envío con clave recordada.
+Solo después crear automatizaciones personales a las horas deseadas y
+seleccionar ejecución inmediata si la versión de iOS lo permite. Comprobar
+una ejecución con el iPhone bloqueado: los permisos/restricciones de Salud
+pueden impedirla. No se garantiza la ejecución en segundo plano.
+
+PESO
+La importación cloud conserva los check-ins históricos y muestra weightKg
+como dato de Salud del día importado. No crea check-ins de seguimiento;
+este comportamiento de v33 se conserva para evitar alterar tu historial.

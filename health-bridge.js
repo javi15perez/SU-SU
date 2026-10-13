@@ -8,7 +8,7 @@
   const BACKUP_KEY = 'susu-health-import-backup';
   const HEALTH_SCHEMA = 1;
   const num = v => Number.isFinite(Number(v)) ? Number(v) : 0;
-  const validDay = v => /^\d{4}-\d{2}-\d{2}$/.test(String(v || ''));
+  const validDay = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0,10) === v;
   const uniq = xs => [...new Set((xs || []).filter(Boolean).map(String))];
 
   function blankHealth() {
@@ -68,6 +68,16 @@
       throw new Error('Formato de Salud no válido');
     }
 
+    if (options.cloud) {
+      const seen = new Set();
+      const fields = ['steps','activeKcal','sleepMinutes','sleepMin','weightKg','distanceKm','exerciseMin','restingHr','heartRate','bodyFatPct','bmi','restingKcal'];
+      if (payload.source !== 'Apple Health' || !payload.days.length || payload.days.length > 31) throw new Error('Datos de Salud inválidos');
+      for (const day of payload.days) {
+        if (!day || !validDay(day.date) || seen.has(day.date)) throw new Error('Fecha de Salud inválida');
+        seen.add(day.date);
+        for (const field of fields) if (day[field] !== undefined && (typeof day[field] !== 'number' || !Number.isFinite(day[field]) || day[field] < 0)) throw new Error('Valor de Salud inválido');
+      }
+    }
     const raw = localStorage.getItem(KEY);
     const state = raw ? JSON.parse(raw) : {};
     if (!state || typeof state !== 'object' || Array.isArray(state)) throw new Error('Datos SU SU no válidos');
@@ -75,7 +85,7 @@
     if (options.cloud) {
       if (!payload.exportedAt || !Number.isFinite(Date.parse(payload.exportedAt))) throw new Error('Fecha de exportación inválida');
       if (state.days && (typeof state.days !== 'object' || Array.isArray(state.days))) throw new Error('Almacenamiento de días inválido; no se modifica');
-      if (state.healthSync?.cloudExportedAt && payload.exportedAt <= state.healthSync.cloudExportedAt) return 0;
+      if (state.healthSync?.cloudExportedAt && Date.parse(payload.exportedAt) <= Date.parse(state.healthSync.cloudExportedAt)) return 0;
       if (raw && localStorage.getItem('susu-health-cloud-baseline-v33') === null) localStorage.setItem('susu-health-cloud-baseline-v33', raw);
     }
     const backup = JSON.stringify(state);
