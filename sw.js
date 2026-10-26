@@ -1,4 +1,4 @@
-const CACHE='susu-v35-weekly-report-20261014-2';
+const CACHE='susu-v36-instinct-20261027-1';
 const ASSETS=['./','./index.html','./styles.css?v=36','./app.js?v=36','./health-bridge.js?v=36','./health-cloud.js?v=36','./instinct.js?v=36','./instinct.css?v=36','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting()})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('susu-')&&key!==CACHE)await caches.delete(key);await self.clients.claim()})()));
