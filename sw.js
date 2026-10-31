@@ -1,4 +1,4 @@
-const CACHE='susu-v40-control-20261031-2';
+const CACHE='susu-v40-control-20261031-3';
 const ASSETS=['./','./index.html','./styles.css?v=40','./app.js?v=40','./health-bridge.js?v=40','./health-cloud.js?v=40','./instinct.js?v=40','./instinct.css?v=40','./control-core.js?v=40','./control.js?v=40','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting()})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('susu-')&&key!==CACHE)await caches.delete(key);await self.clients.claim()})()));
